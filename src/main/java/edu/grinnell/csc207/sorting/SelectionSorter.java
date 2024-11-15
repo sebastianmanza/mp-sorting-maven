@@ -2,6 +2,8 @@ package edu.grinnell.csc207.sorting;
 
 import java.util.Comparator;
 
+import edu.grinnell.csc207.main.SortTools;
+
 /**
  * Something that sorts using selection sort.
  *
@@ -40,6 +42,23 @@ public class SelectionSorter<T> implements Sorter<T> {
   // | Methods |
   // +---------+
 
+/**
+ * Selects the smallest value in the array.
+ * @param values The array being searched.
+ * @return The index of the arrays smallest value.
+ */
+  private int select(T[] values, int unsorted) {
+    /* Initialize a minimum value. */
+    int minIndex = unsorted;
+    for (int i = unsorted + 1; i < values.length; i++) {
+      /* Find if there is a new minimum value and set the minimum index to that. */
+      if (order.compare(values[minIndex], values[i]) > 0 ) {
+        minIndex = i;
+      } //if
+    } //for
+    return minIndex;
+  } //select(T[] values)
+
   /**
    * Sort an array in place using selection sort.
    *
@@ -55,6 +74,8 @@ public class SelectionSorter<T> implements Sorter<T> {
    */
   @Override
   public void sort(T[] values) {
-    // STUB
+    for (int i = 0; i < values.length; i++) {
+      SortTools.swap(values, i, select(values, i));
+    } //for
   } // sort(T[])
 } // class SelectionSorter

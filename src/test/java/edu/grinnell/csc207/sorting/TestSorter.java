@@ -1,23 +1,19 @@
 package edu.grinnell.csc207.sorting;
 
-import edu.grinnell.csc207.util.ArrayUtils;
-
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.Test;
+
+import edu.grinnell.csc207.util.ArrayUtils;
 
 /**
  * Tests of Sorter objects. Please do not use this class directly.
  * Rather, you should subclass it and initialize stringSorter and
  * intSorter in a static @BeforeAll method.
  *
- * @author Your Name
+ * @author Sebastian Manza
  * @uathor Samuel A. Rebelsky
  */
 public class TestSorter {
@@ -120,4 +116,77 @@ public class TestSorter {
     ArrayUtils.permute(original);
     assertSorts(expected, original, intSorter);
   } // permutedIntegers
+
+  /**
+   * Ensure that very large random
+   * array sorts correctly.
+   */
+  @Test 
+  public void permutedHugeIntegersTest() { 
+    int SIZE = 15000; 
+    if (null == intSorter) { 
+      return; 
+    } // if
+    Integer[] original = new Integer[SIZE];
+    for (int i = 0; i < SIZE; i++) {
+      original[i] = i;
+    } // for
+    Integer[] expected = original.clone();
+    ArrayUtils.permute(original);
+    assertSorts(expected, original, intSorter);
+  } // permutedIntegers
+
+  /**
+   * Hopefully no sorting algorithm can mess up an empty array!
+   */
+  @Test
+  public void emptyArrayTest() {
+    if (null == intSorter) {
+      return;
+    } //if
+    Integer[] original = new Integer[] {};
+    Integer[] expected = original.clone();
+  assertSorts(expected, original, intSorter);
+  } //emptyArrayTest
+
+  /**
+   * Test the sorter when negatives are mixed in.
+   */
+  @Test
+  public void negativesIncludedTest() {
+    int SIZE = 10000;
+    if (null == intSorter) {
+      return;
+    } //if
+    Integer[] original = new Integer[SIZE];
+    for (int i = 0; i < SIZE; i++) {
+      original[i] = i - SIZE;
+    } //for
+    Integer[] expected = original.clone();
+    ArrayUtils.permute(original);
+    assertSorts(expected, original, intSorter);
+  } //negativesIncludedTest
+
+  /**
+   * Test the sorter with a lot of duplicates
+   */
+  @Test
+  public void duplicatesTest() {
+    int SIZE = 100; 
+    if (null == intSorter) { 
+      return; 
+    } // if
+    Integer[] original = new Integer[SIZE];
+    for (int i = 0; i < SIZE; i += 2) {
+      original[i] = i;
+      original[i+1] = i;
+    } // for
+    Integer[] expected = original.clone();
+    ArrayUtils.permute(original);
+    assertSorts(expected, original, intSorter);
+  } //duplicatesTest
+
+  /**
+   * 
+   */
 } // class TestSorter

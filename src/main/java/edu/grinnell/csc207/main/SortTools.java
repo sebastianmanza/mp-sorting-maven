@@ -1,15 +1,13 @@
 package edu.grinnell.csc207.main;
 
-import edu.grinnell.csc207.sorting.Sorter;
-import edu.grinnell.csc207.util.SimpleTimer;
-
+import java.io.PrintWriter;
+import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Random;
 
-import java.io.PrintWriter;
-
-import java.lang.reflect.Constructor;
+import edu.grinnell.csc207.sorting.Sorter;
+import edu.grinnell.csc207.util.SimpleTimer;
 
 /**
  * Tools for exploring sorting implementations.
@@ -528,7 +526,7 @@ public class SortTools {
    * @param j
    *   The index of another value.
    */
-  static void swap(Object[] arr, int i, int j) {
+  public static void swap(Object[] arr, int i, int j) {
     Object tmp = arr[i];
     arr[i] = arr[j];
     arr[j] = tmp;
