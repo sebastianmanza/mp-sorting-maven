@@ -4,10 +4,12 @@ import java.util.Comparator;
 import java.util.Random;
 
 /**
- * Something that sorts using a customized sorting algorithm.
+ * Something that sorts using a customized sorting algorithm. Uses insertion
+ * sort if the array is less than size 50 or if 9/10 randomly selected pairs of
+ * index's are already in order (since insertion sort works well for mostly
+ * sorted arrays.)
  *
- * @param <T>
- *   The types of values that are sorted.
+ * @param <T> The types of values that are sorted.
  *
  * @author Sebastian Manza
  */
@@ -16,7 +18,6 @@ public class ManzaSebSorter<T> implements Sorter<T> {
     // +--------+------------------------------------------------------
     // | Fields |
     // +--------+
-
     /**
      * The way in which elements are ordered.
      */
@@ -25,13 +26,11 @@ public class ManzaSebSorter<T> implements Sorter<T> {
     // +--------------+------------------------------------------------
     // | Constructors |
     // +--------------+
-
     /**
      * Create a sorter using a particular comparator.
      *
-     * @param comparator
-     *   The order in which elements in the array should be ordered
-     *   after sorting.
+     * @param comparator The order in which elements in the array should be
+     * ordered after sorting.
      */
     public ManzaSebSorter(Comparator<? super T> comparator) {
         this.order = comparator;
@@ -40,27 +39,26 @@ public class ManzaSebSorter<T> implements Sorter<T> {
     // +---------+-----------------------------------------------------
     // | Methods |
     // +---------+
-
     public void sort(T[] values) {
         if (values == null || values.length <= 1) {
             return; // No need to sort if empty or single-element array
-        }
+        } //if
 
         // Use MergeSort or QuickSort for larger arrays
         if (values.length > 50) {
             int orderedPairs = countOrderedPairs(values);
             // If most pairs are ordered, use Insertion Sort
-            if (orderedPairs >= 7) {
+            if (orderedPairs >= 9) {
                 insertionSort(values);
             } else {
                 // Use MergeSort for large arrays
                 mergeSort(values, 0, values.length - 1);
-            }
+            } //if/else
         } else {
             // Use Insertion Sort for smaller arrays
             insertionSort(values);
-        }
-    }
+        } //if/else
+    } //sort
 
     // Count how many of the 10 random pairs are ordered
     private int countOrderedPairs(T[] values) {
@@ -72,15 +70,15 @@ public class ManzaSebSorter<T> implements Sorter<T> {
             int idx2 = rand.nextInt(values.length);
             while (idx1 == idx2) {  // Avoid same indices
                 idx2 = rand.nextInt(values.length);
-            }
+            } //while
 
             if (order.compare(values[idx1], values[idx2]) < 0) {
                 orderedCount++;
-            }
-        }
+            } //if
+        } //for
 
         return orderedCount;
-    }
+    } //countOrderedPairs
 
     // Insertion Sort algorithm for generic arrays
     private void insertionSort(T[] values) {
@@ -92,10 +90,10 @@ public class ManzaSebSorter<T> implements Sorter<T> {
             while (j >= 0 && order.compare(values[j], key) > 0) {
                 values[j + 1] = values[j];
                 j = j - 1;
-            }
+            } //while
             values[j + 1] = key;
-        }
-    }
+        } //for
+    } //insertionSort(T[])
 
     // Merge Sort algorithm for generic arrays
     private void mergeSort(T[] values, int left, int right) {
@@ -108,8 +106,8 @@ public class ManzaSebSorter<T> implements Sorter<T> {
 
             // Merge the sorted halves
             merge(values, left, mid, right);
-        }
-    }
+        } //if
+    } //mergeSort(T[], int, int)
 
     // Merge the two sorted halves
     private void merge(T[] values, int left, int mid, int right) {
@@ -133,51 +131,17 @@ public class ManzaSebSorter<T> implements Sorter<T> {
                 values[k++] = leftArray[i++];
             } else {
                 values[k++] = rightArray[j++];
-            }
-        }
+            } //if/else
+        } //while
 
         // Copy any remaining elements of leftArray[]
         while (i < n1) {
             values[k++] = leftArray[i++];
-        }
+        } //while
 
         // Copy any remaining elements of rightArray[]
         while (j < n2) {
             values[k++] = rightArray[j++];
-        }
-    }
-
-    // QuickSort-like recursive algorithm for generic arrays
-    private void quickSortLike(T[] values, int low, int high) {
-        if (low < high) {
-            // Partitioning index
-            int pivotIndex = partition(values, low, high);
-
-            // Recursively sort elements
-            quickSortLike(values, low, pivotIndex - 1);
-            quickSortLike(values, pivotIndex + 1, high);
-        }
-    }
-
-    // Partition the array using a pivot (like in Quicksort)
-    private int partition(T[] values, int low, int high) {
-        T pivot = values[high];
-        int i = low - 1;
-
-        for (int j = low; j < high; j++) {
-            if (order.compare(values[j], pivot) < 0) {
-                i++;
-                swap(values, i, j);
-            }
-        }
-        swap(values, i + 1, high);
-        return i + 1;
-    }
-
-    // Swap utility function
-    private void swap(T[] values, int i, int j) {
-        T temp = values[i];
-        values[i] = values[j];
-        values[j] = temp;
-    }
-}
+        } //while
+    } //merge
+}//class ManzaSebSorter
